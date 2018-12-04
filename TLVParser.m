@@ -7,7 +7,6 @@
 //
 
 #import "TLVParser.h"
-#TAG_AND_LENGTH_COUNT = 4
 @implementation TLVParser
 + (NSMutableDictionary*) parseTLV: (NSString *) tlvString{
     
@@ -24,19 +23,19 @@
     
     
     for (int i = 0; i < [tlvCharacterArray count];){
-        if (i + TAG_AND_LENGTH_COUNT < [tlvCharacterArray count]){
+        if (i + 4 < [tlvCharacterArray count]){
 
             NSString* tag = [NSString stringWithFormat:@"%@%@", tlvCharacterArray[i], tlvCharacterArray[i + 1]];
             NSString* value = [NSString stringWithFormat:@"%@%@", tlvCharacterArray[i + 2], tlvCharacterArray[i + 3]];
             int valueLength = [value intValue];
             NSMutableArray *valueArray = [NSMutableArray array];
             
-            for (int j = i + TAG_AND_LENGTH_COUNT; j < i + TAG_AND_LENGTH_COUNT + valueLength; j++){
+            for (int j = i + 4; j < i + 4 + valueLength; j++){
                 [valueArray addObject:[NSString stringWithFormat:@"%C", [tlvString characterAtIndex:j]]];
             }
             [tagAndValue setObject:[valueArray componentsJoinedByString:@""]  forKey:tag];
 
-            i += TAG_AND_LENGTH_COUNT + valueLength;
+            i += 4 + valueLength;
         }
         
     }
